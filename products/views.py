@@ -3,6 +3,13 @@ from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 
 
+categories_db = [
+    {'id': 1, 'name': 'Украшения', 'slug': 'jewerly'},
+    {'id': 2, 'name': 'Винтаж', 'slug': 'vintage'},
+    {'id': 3, 'name': 'Новый год', 'slug': 'newYear'},
+]
+
+
 def product_list(request):
     return HttpResponse("Список товаров")
 
