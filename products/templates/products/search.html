@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h3>Результаты поиска</h3>
+    {% if products %}
+    <div class="grid">
+        {% for p in products %}
+        {% if p.is_published %}
+        <div class="card">
+            <img src="{% static 'core/images/' %}{{ p.image }}" alt="{{ p.title }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ p.title }}</h5>
+                {% autoescape off %}
+                <p class="card-text">{{ p.content|linebreaks|truncatewords:10 }}</p>
+                {% endautoescape %}
+                <a href="products/{{ p.id }}/" class="btn">Подробнее</a>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>Ничего не найдено.</p>
+    {% endif %}
+</div>
+{% endblock %}
