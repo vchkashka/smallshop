@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from products.views import data_db
+from products.models import Product
 
 
 menu = [{'title': "О сайте", 'url_name': 'about_us'},
@@ -10,10 +10,11 @@ menu = [{'title': "О сайте", 'url_name': 'about_us'},
 
 
 def index(request):
+    products = Product.objects.all()
     data = {
         'title': 'Главная страница',
         'menu': menu,
-        'products': data_db,
+        'products': products,
     }
     return render(request, 'core/index.html', data)
 
