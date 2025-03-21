@@ -10,7 +10,7 @@ menu = [{'title': "О сайте", 'url_name': 'about_us'},
 
 
 def index(request):
-    products = Product.objects.all()
+    products = Product.published.all()
     data = {
         'title': 'Главная страница',
         'menu': menu,

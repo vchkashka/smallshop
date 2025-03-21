@@ -15,7 +15,7 @@
                 {% autoescape off %}
                 <p class="card-text">{{ p.content|linebreaks|truncatewords:10 }}</p>
                 {% endautoescape %}
-                <a href="products/{{ p.id }}/" class="btn">Подробнее</a>
+                <a href="{% url 'product_detail' p.slug %}" class="btn">Подробнее</a>
             </div>
         </div>
         {% endif %}

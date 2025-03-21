@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponse
 from .models import Product
@@ -15,17 +15,24 @@ def product_list(request):
     return HttpResponse("Список товаров")
 
 
-def product_detail(request, product_id):
-    if product_id > 10:
-        return redirect(reverse('home'))
+def product_detail(request, product_slug):
+    product = get_object_or_404(Product, slug=product_slug)
+    # if product_id > 10:
+    #     return redirect(reverse('home'))
+    from core.views import menu
 
-    return HttpResponse(f"Товар №{product_id}")
+    data = {
+        'title': product.title,
+        'product': product,
+        'menu': menu,
+    }
+    return render(request, 'products/detail.html', data)
 
 
 def product_search(request):
     from core.views import menu
     query = request.GET.get('q', '').strip()  # Убираем лишние пробелы
-    filtered_products = Product.objects.all().filter(title__contains=query)
+    filtered_products = Product.published.all().filter(title__icontains=query)
 
     data = {
         'title': 'Поиск товаров',

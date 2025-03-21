@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h1>{{product.title}}</h1>
+
+{% if product.image %}
+<p><img src="{% static 'core/images/' %}{{ product.image }}"></p>
+{% endif %}
+
+{{product.content|linebreaks}}
+{% endblock %}
