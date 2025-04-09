@@ -1,12 +1,44 @@
 {% extends 'base.html' %}
 {% load static %}
 
+
 {% block content %}
-<h1>{{product.title}}</h1>
+<link rel="stylesheet" href="{% static 'core/css/style.css' %}">
 
-{% if product.image %}
-<p><img src="{% static 'core/images/' %}{{ product.image }}"></p>
-{% endif %}
+<div class="product-detail">
+    <div class="product-detail-wrapper">
+        {% if product.image %}
+            <img src="{% static 'core/images/' %}{{ product.image }}" alt="{{ product.title }}" class="product-image">
+        {% endif %}
 
-{{product.content|linebreaks}}
+        <div class="product-info">
+            <h1 class="product-title">{{ product.title }}</h1>
+            {% block breadcrumbs %} 
+            <!-- Теги --> 
+                {% with product.tags.all as tags %} 
+                    {% if tags %} 
+                        <ul class="tags-list"> 
+                            {% for t in tags %} 
+                            <li><a 
+                        href="{{t.get_absolute_url}}">{{t.tag}}</a></li> 
+                            {% endfor %} 
+                        </ul>
+                    {% endif %} 
+                {% endwith %} 
+            {% endblock %}
+            <div class="product-description">
+                {{ product.content|linebreaks }}
+            </div>
+
+            {% if product.price %}
+                <p class="product-price">Цена: {{ product.price }} ₽</p>
+            {% endif %}
+
+            <form method="post" action="{% url 'create_order' %}">
+                {% csrf_token %}
+                <button class="btn">Добавить в корзину</button>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -1,5 +1,44 @@
-{% extends 'base.html' %} 
-  
-{% block content %} 
-<h3>Категория товаров - {{category}}</h3> 
-{% endblock %} 
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% if category.details %}
+      {% if category.details.banner_image %}
+      <div class="banner" style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('{% static 'core/images/' %}{{ category.details.banner_image }}');">
+              {% if category.details.description %}
+                <div class="banner-content">
+                  <h1>Категория товара: {{category.name}}</h1>
+                  <p>{{ category.details.description }}</p>
+                </div>
+              {% endif %}
+          </div>
+      {% endif %}
+    {% endif %}
+
+<div class="container">
+
+    {% if products %}
+    <div class="grid">
+        {% for p in products %}
+        <div class="card">
+            <img src="{% static 'core/images/' %}{{ p.image }}" alt="{{ p.title }}">
+              <div class="card-body">
+                <div class="card-content">
+                  <h5 class="card-title">{{ p.title }}</h5>
+                  <p class="product-price">{{ p.price }} ₽</p>
+                  <div class="card-text">
+                    {% autoescape off %}
+                    {{ p.content|linebreaks|truncatewords:10 }}
+                    {% endautoescape %}
+                  </div>
+                </div>
+                <a href="{% url 'product_detail' p.slug %}" class="btn">Подробнее</a>
+              </div>
+          </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>Нет товаров в этой категории.</p>
+    {% endif %}
+</div>
+{% endblock %}

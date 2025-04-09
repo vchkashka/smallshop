@@ -12,6 +12,7 @@
             <img src="{% static 'core/images/' %}{{ p.image }}" alt="{{ p.title }}">
             <div class="card-body">
                 <h5 class="card-title">{{ p.title }}</h5>
+                <p class="product-price">{{ p.price }} ₽</p>
                 {% autoescape off %}
                 <p class="card-text">{{ p.content|linebreaks|truncatewords:10 }}</p>
                 {% endautoescape %}

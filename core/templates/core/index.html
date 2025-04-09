@@ -1,21 +1,35 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load products_tags %}
 
 {% block content %}
+{% show_all_tags %}
+<div class="banner" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{% static 'core/images/banner.jpg' %}');">
+  <div class="banner-content">
+    <h1>Лавка редкостей</h1>
+    <p>Магазин уникальных ручных изделий и винтажных товаров. Подарки, украшения и предметы искусства, которые привнесут атмосферу старины и уюта в ваш дом.</p>
+  </div>
+</div>
+
 <div class="container">
   <div class="grid">
     {% for p in products %}
       {% if p.is_published %}
-        <div class="card">
-          <img src="{% static 'core/images/' %}{{ p.image }}" alt="{{ p.title }}">
+      <div class="card">
+        <img src="{% static 'core/images/' %}{{ p.image }}" alt="{{ p.title }}">
           <div class="card-body">
-            <h5 class="card-title">{{ p.title }}</h5>
-            {% autoescape off %}
-              <p class="card-text">{{ p.content|linebreaks|truncatewords:10 }}</p>
-            {% endautoescape %}
+            <div class="card-content">
+              <h5 class="card-title">{{ p.title }}</h5>
+              <p class="product-price">{{ p.price }} ₽</p>
+              <div class="card-text">
+                {% autoescape off %}
+                {{ p.content|linebreaks|truncatewords:10 }}
+                {% endautoescape %}
+              </div>
+            </div>
             <a href="{% url 'product_detail' p.slug %}" class="btn">Подробнее</a>
           </div>
-        </div>
+      </div>
       {% endif %}
     {% endfor %}
   </div>
