@@ -1,0 +1,209 @@
+/* #header, .module caption{ 
+    background: #194b02;
+    }
+
+div.breadcrumbs { 
+    background: #6D4C41;
+    }
+
+.module h2, .module caption, .inline-group h2, .module tbody{ 
+    background: #6D4C41; 
+    }
+
+#changelist-form, .main, .sticky, .changelist-form-container, .actions, .results {
+    background: #A66A4C;
+} */
+
+#header, #result_list thead th { 
+    background: #194b02; 
+    } 
+
+div.breadcrumbs, div#changelist-filter {
+    background-color: #6D4C41;
+}
+
+details, details ul {
+    color: #F5E3C3;
+}
+
+#changelist-filter h2 {
+    background-color: #194b02;
+}
+
+#changelist-filter ul li a:hover {
+    background-color: #fdc073;
+    color: #000;
+}
+
+#changelist-filter ul li.selected a {
+    color: #fdc073;
+    font-weight: bold;
+}
+
+body, .dashboard, .main, th[scope], td, .sticky, #nav-sidebar.sticky, #nav-filter, div.changelist-form-container,
+#changelist.module.filtered, div#toolbar, div.actions, a.addlink, #searchbar, table#result_list,
+th.field-id, th.sortable.column-title.sorted.ascending, td.field-is_published select,
+select[name="action"], select[name="action"] option, fieldset.module.aligned, input, #id_content.vLargeTextField {
+    background-color: #F5E3C3 !important;
+    background: #F5E3C3 !important;
+    border-color: #6D4C41 !important;
+    color: #6D4C41 !important;
+}
+
+label.required, label, p.file-upload, #id_tags_helptext.help,
+#id_tags_add_all_link.selector-chooseall.active, #id_tags_remove_all_link.selector-clearall {
+    color: #6D4C41 !important;
+}
+
+p.paginator, #id_tags_selector_chosen.selector-chosen h2 {
+    background-color: #194b02 !important;
+    color: #F5E3C3 !important;
+}
+
+input[type="submit"], li a.addlink, .actions .button {
+    background-color: #194b02 !important;
+    color: #F5E3C3 !important;
+    border-color: #F5E3C3 !important;
+}
+
+input[type="submit"]:hover,
+li a.addlink:hover,
+.actions .button:hover {
+    background-color: #fdc073 !important;
+    color: #194b02 !important;
+    border-color: #6D4C41!important;
+}
+
+div.actions, select {
+    background-color: #6D4C41 !important;
+    color: #F5E3C3 !important;
+}
+
+button[type="submit"]{
+    background-color: #F5E3C3 !important;
+    
+}
+
+button[type="submit"]:hover {
+    background-color: #6D4C41;
+}
+
+.app-auth.module {
+    background-color: #F5E3C3;
+  }
+
+tbody {
+    background-color: #F5E3C3;
+}
+
+div.results {
+    border-color: #194b02;
+}
+
+/* Стилизация заголовка */
+h1, h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #6D4C41;
+    padding: 10px 0;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #6D4C41; 
+  }
+
+  a {
+    color: #6D4C41;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  } 
+
+  /* Таблицы приложений */
+  .module table,  .module tbody {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+    background-color: #194b02;
+    border: 1px solid #194b02;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  
+  .module caption {
+    font-size: 20px;
+    font-weight: 600;
+    padding: 10px 15px;
+    background-color: #194b02;
+    border-bottom: 1px solid #194b02;
+  }
+  
+  .module th, .module td {
+    padding: 12px 16px;
+    text-align: left;
+    border-top: 1px solid #194b02;
+    vertical-align: middle;
+  }
+  
+  .module tr:nth-child(even) {
+    background-color: #194b02;
+  }
+  
+  .module a, .module a.addlink, .module a.changelink {
+    color: #6D4C41;
+    font-weight: 500;
+  }
+
+  .module a:hover, .module a.addlink:hover, .module a.changelink:hover {
+    background: #194b02;
+    color:#F5E3C3;
+  }
+  
+  /* Блок "Последние действия" */
+  #content-related {
+    background-color: #fdc073;
+    border: 1px solid #194b02;
+    border-radius: 6px;
+    padding: 15px;
+    margin-top: 20px;
+  }
+  
+  #recent-actions-module h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    background-color: #fdc073;
+  }
+  
+  #recent-actions-module ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+  
+  #recent-actions-module li {
+    margin-bottom: 10px;
+    padding: 6px 8px;
+    border-left: 4px solid #194b02;
+    background-color: #F5E3C3;
+    border-radius: 4px;
+  }
+  
+  #recent-actions-module li.addlink {
+    border-left-color: #27ae60;
+  }
+  
+  #recent-actions-module li.deletelink {
+    border-left-color: #c0392b;
+  }
+  
+  #recent-actions-module li.changelink {
+    border-left-color: #2980b9;
+  }
+  
+  #recent-actions-module li a, #recent-actions-module li {
+    font-weight: 500;
+    color: #6D4C41;
+  }
+  
+  .mini.quiet {
+    font-size: 12px;
+    color: #6D4C41;
+  }
