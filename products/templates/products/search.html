@@ -9,7 +9,7 @@
         {% for p in products %}
         {% if p.is_published %}
         <div class="card">
-            <img src="{% static 'core/images/' %}{{ p.image }}" alt="{{ p.title }}">
+            <img src="{{ p.image.url }}" alt="{{ p.title }}">
             <div class="card-body">
                 <h5 class="card-title">{{ p.title }}</h5>
                 <p class="product-price">{{ p.price }} ₽</p>

@@ -5,7 +5,7 @@
 {% if category.details %}
       {% if category.details.banner_image %}
       <div class="banner" style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('{% static 'core/images/' %}{{ category.details.banner_image }}');">
-              {% if category.details.description %}
+               {% if category.details.description %}
                 <div class="banner-content">
                   <h1>Категория товара: {{category.name}}</h1>
                   <p>{{ category.details.description }}</p>
@@ -21,7 +21,7 @@
     <div class="grid">
         {% for p in products %}
         <div class="card">
-            <img src="{% static 'core/images/' %}{{ p.image }}" alt="{{ p.title }}">
+            <img src="{{ p.image.url }}" alt="{{ p.title }}">
               <div class="card-body">
                 <div class="card-content">
                   <h5 class="card-title">{{ p.title }}</h5>

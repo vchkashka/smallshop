@@ -45,12 +45,15 @@ class Product(models.Model):
 
     objects = models.Manager()
     published = PublishedModel()
-    title = models.CharField(max_length=255, verbose_name="Заголовок")
-    content = models.TextField(blank=True)
+    title = models.CharField(max_length=255, verbose_name="Название")
+    content = models.TextField(blank=True, verbose_name="Описание")
     price = models.DecimalField(max_digits=10, decimal_places=2,
                                 blank=False, null=False, verbose_name="Цена")
-    image = models.ImageField()
-    is_published = models.BooleanField(choices=tuple(map(lambda x: (bool(x[0]), x[1]), Status.choices)), default=Status.DRAFT, verbose_name="Состояние")
+    image = models.ImageField(upload_to="product_images/",
+                              verbose_name="Изображение")
+    is_published = models.BooleanField(
+        choices=tuple(map(lambda x: (bool(x[0]), x[1]), Status.choices)),
+        default=Status.DRAFT, verbose_name="Состояние")
     slug = models.SlugField(max_length=255, db_index=True, unique=True)
 
     category = models.ForeignKey(Category, on_delete=models.CASCADE)

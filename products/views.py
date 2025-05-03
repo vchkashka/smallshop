@@ -2,6 +2,24 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponse
 from .models import Product, Category, TagProduct
+from .forms import AddProductForm
+
+
+def addproduct(request):
+    if request.method == 'POST':
+        form = AddProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            # try:
+            #     Product.objects.create(**form.cleaned_data)
+            #     return redirect('home')
+            # except Exception:
+            #     form.add_error(None, 'Ошибка добавления товара')
+            form.save()
+            return redirect('home')
+    else:
+        form = AddProductForm()
+    return render(request, 'products/addproduct.html',
+                  {'title': 'Добавление товара', 'form': form})
 
 
 def product_list(request):
@@ -47,7 +65,7 @@ def category_detail(request, category_slug):
 def show_tag_productlist(request, tag_slug):
     tag = get_object_or_404(TagProduct, slug=tag_slug)
     products = tag.tags.filter(is_published=Product.Status.PUBLISHED)
-    data = { 
+    data = {
         'title': f'Тег: {tag.tag}',
         'products': products,
         'cat_selected': None,

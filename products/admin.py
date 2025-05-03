@@ -1,5 +1,6 @@
 from django.contrib import admin, messages
 from django.contrib.admin import SimpleListFilter
+from django.utils.safestring import mark_safe
 from .models import Product, TagProduct, Category, CategoryDetails
 
 
@@ -45,7 +46,7 @@ class HasTagsFilter(SimpleListFilter):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'price', 'is_published', 'brief_info',
-                    'tags_count')
+                    'tags_count', 'product_image')
     list_display_links = ('id', 'title')
     list_editable = ('is_published', )
     list_per_page = 5
@@ -53,9 +54,13 @@ class ProductAdmin(admin.ModelAdmin):
     actions = ['set_published', 'set_draft']
     search_fields = ['title']
     list_filter = ['is_published', PriceRangeFilter, HasTagsFilter]
-    readonly_fields = ['slug']
+    readonly_fields = ['slug', 'product_image']
     exclude = ['is_published']
     filter_horizontal = ['tags']
+
+    @admin.display(description="Изображение")
+    def product_image(self, product: Product):
+        return mark_safe(f"<img src='{product.image.url}' width=50>")
 
     @admin.display(description="Краткое описание")
     def brief_info(self, product: Product):
