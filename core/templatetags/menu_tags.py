@@ -3,11 +3,13 @@ from django import template
 register = template.Library()
 
 
-@register.inclusion_tag('core/menu.html')
-def show_menu():
+@register.inclusion_tag('core/menu.html', takes_context=True)
+def show_menu(context):
     menu = [
         {'title': "О сайте", 'url_name': 'about_us'},
         {'title': "Обратная связь", 'url_name': 'contact'},
-        {'title': "Войти", 'url_name': 'login'},
     ]
-    return {'menu': menu}
+    return {
+        'menu': menu,
+        'user': context['user'],
+    }

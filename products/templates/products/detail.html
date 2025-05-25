@@ -30,6 +30,17 @@
                 {{ product.content|linebreaks }}
             </div>
 
+            {% if product.seller %}
+                {% if request.user != product.seller %}
+                    <p class="product-seller">
+                        Продавец:
+                        <a href="{% url 'users:public_profile' product.seller.pk %}">
+                            {{ product.seller.username }}
+                        </a>
+                    </p>
+                {% endif %}
+            {% endif %}
+
             {% if product.price %}
                 <p class="product-price">Цена: {{ product.price }} ₽</p>
             {% endif %}

@@ -162,6 +162,18 @@
  	float: right;
  }
 
+ ul.mainmenu li span.username {
+    color: #fff;
+    font-size: 24px;
+    padding: 10px 0;
+}
+
+ ul.mainmenu li span.line {
+    color: #ddc8a5;
+    font-size: 24px;
+    padding: 10px 0;
+}
+
  ul.mainmenu li a {
 	color: #ddc8a5;
 	text-decoration: none;

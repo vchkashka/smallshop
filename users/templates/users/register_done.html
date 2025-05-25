@@ -1,0 +1,10 @@
+{% extends 'base.html' %} 
+  
+{% block content %} 
+<h1 class="left-indent">Добро пожаловать!</h1> 
+  
+<p class="left-indent">Вы успешно зарегистрировались на сайте! Для входа в 
+систему необходимо авторизоваться по этой <a href="{% 
+url 'users:login' %}">ссылке</a> 
+</p> 
+{% endblock %}

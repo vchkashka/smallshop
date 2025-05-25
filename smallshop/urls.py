@@ -13,7 +13,7 @@ admin.site.index_title = ("Магазин изделий ручной работ
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
-    path('users/', include('users.urls')),
+    path('users/', include('users.urls', namespace="users")),
     path('products/', include('products.urls')),
     path('orders/', include('orders.urls')),
 ]

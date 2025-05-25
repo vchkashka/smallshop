@@ -21,12 +21,13 @@
 {% block mainmenu %}
 <div class="header">
 	{% show_menu %}
-	
+
 	<!-- Форма поиска справа -->
 	<form method="GET" action="{% url 'product_search' %}" class="search-form">
 		<input type="text" name="q" placeholder="Поиск товаров">
 		<button type="submit" class="cta-button">Искать</button>
 	</form>
+
 </div>
 {% endblock mainmenu %}
 
@@ -49,7 +50,7 @@
 {% endblock %}
 {% endblock %}
 {% block navigation %} 
-{% endblock %} 
+{% endblock %}
 	</div>
 <!-- Конец блока контента -->
 

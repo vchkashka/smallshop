@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% if request.user != seller %}
+        <h3 class="left-indent">Продавец: {{ seller.username }}</h3>
+        <p class="left-indent">Имя: {{ seller.first_name }}</p>
+        <p class="left-indent">Фамилия: {{ seller.last_name }}</p>
+        <p class="left-indent">Email: {{ seller.email }}</p>
+    {% endif %}
+{% endblock %}

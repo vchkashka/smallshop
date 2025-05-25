@@ -7,6 +7,7 @@ from .models import Product, Category, TagProduct
 from django.views.generic.edit import (FormView, CreateView,
                                        UpdateView, DeleteView)
 from .utils import DataMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 # def addproduct(request):
@@ -54,13 +55,18 @@ from .utils import DataMixin
 #         return super().form_valid(form)
 
 
-class AddProduct(DataMixin, CreateView):
+class AddProduct(LoginRequiredMixin, DataMixin, CreateView):
     model = Product
     fields = ['title', 'content', 'price', 'image', 'is_published', 'category',
               'tags']
     template_name = 'products/addproduct.html'
     success_url = reverse_lazy('home')
     title_page = 'Добавление товара'
+
+    def form_valid(self, form):
+        p = form.save(commit=False)
+        p.seller = self.request.user
+        return super().form_valid(form)
 
 
 class UpdateProduct(DataMixin, UpdateView):

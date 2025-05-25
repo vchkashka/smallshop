@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.utils.text import slugify
 from django.urls import reverse
 from django.db import models
@@ -60,6 +61,9 @@ class Product(models.Model):
                                  verbose_name="Категория")
     tags = models.ManyToManyField('TagProduct', blank=True,
                                   related_name='tags', verbose_name="Теги")
+    seller = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL,
+                               related_name='products', null=True,
+                               default=None)
 
     def __str__(self):
         return self.title

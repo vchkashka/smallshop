@@ -28,7 +28,7 @@ class Home(DataMixin, ListView):
     #     'cat_selected': 0,
     # }
     template_name = 'core/index.html'
-    
+
     # extra_context = {
     #     'title': 'Главная страница',
     #     'products': products,
