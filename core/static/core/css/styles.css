@@ -722,3 +722,39 @@ margin-top: 0;
     color: #8e000c;
 	text-transform: uppercase;	
 }
+
+.list-pages ul {
+	margin: 20px 0 20px 0;
+	padding: 0;
+	text-align: center;
+	list-style: none;
+}
+.list-pages ul li {
+	display: inline-block;
+	margin: 0 5px 0 0;
+}
+.list-pages a {
+	color: #6D4C41;
+	font-size: 16px;
+	text-decoration: none;
+}
+.list-pages .page-num, .page-num-selected {
+	display: inline-block;
+	width: 50px;
+	height: 30px;
+	line-height: 30px;
+	border: 1px solid #6D4C41;
+	border-radius: 10px;
+	text-align: center;
+}
+.list-pages .page-num:hover {
+	box-shadow: 3px 3px 1px #F5E3C3;
+}
+.list-pages .page-num-selected {
+	border: none;
+	color: #194b02;
+	font-size: 20px;
+}
+.list-pages .page-num-selected:hover {
+	box-shadow: none;
+}

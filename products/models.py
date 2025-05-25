@@ -56,9 +56,10 @@ class Product(models.Model):
         default=Status.DRAFT, verbose_name="Состояние")
     slug = models.SlugField(max_length=255, db_index=True, unique=True)
 
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE,
+                                 verbose_name="Категория")
     tags = models.ManyToManyField('TagProduct', blank=True,
-                                  related_name='tags')
+                                  related_name='tags', verbose_name="Теги")
 
     def __str__(self):
         return self.title
