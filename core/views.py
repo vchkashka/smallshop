@@ -1,5 +1,8 @@
 from django.views.generic.edit import FormView
 from django.views.generic import TemplateView, ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import redirect_to_login
+from django.contrib.auth.mixins import UserPassesTestMixin
 from products.models import Product
 from .forms import UploadFileForm
 from products.utils import DataMixin
@@ -19,20 +22,8 @@ import uuid
 class Home(DataMixin, ListView):
     def get_queryset(self):
         return Product.published.all()
-    # template_name = 'core/index.html'
     context_object_name = 'products'
-
-    # extra_context = {
-    #     'title': 'Главная страница',
-    #     'cat_selected': 0,
-    # }
     template_name = 'core/index.html'
-
-    # extra_context = {
-    #     'title': 'Главная страница',
-    #     'products': products,
-    #     'cat_selected': 0,
-    # }
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -54,18 +45,7 @@ def handle_uploaded_file(f):
             destination.write(chunk)
 
 
-# def about_us(request):
-#     if request.method == "POST":
-#         form = UploadFileForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             handle_uploaded_file(form.cleaned_data['file'])
-#     else:
-#         form = UploadFileForm()
-#     return render(request, 'core/about.html', {'title': 'О нас',
-# 'form': form})
-
-
-class AboutUs(DataMixin, FormView):
+class AboutUs(UserPassesTestMixin, DataMixin, FormView):
     template_name = 'core/about.html'
     form_class = UploadFileForm
     success_url = '/about/'
@@ -75,13 +55,15 @@ class AboutUs(DataMixin, FormView):
         handle_uploaded_file(form.cleaned_data['file'])
         return super().form_valid(form)
 
-# def contact(request):
-#     data = {
-#         'title': 'Контактная информация',
-#         }
-#     return render(request, 'core/contact.html', data)
+    def test_func(self):
+        user = self.request.user
+        return user.is_authenticated and user.groups.filter(
+            name='Менеджеры').exists()
+
+    def handle_no_permission(self):
+        return redirect_to_login(self.request.get_full_path())
 
 
-class Contact(DataMixin, TemplateView):
+class Contact(LoginRequiredMixin, DataMixin, TemplateView):
     template_name = 'core/contact.html'
     title_page = 'Контактная информация'

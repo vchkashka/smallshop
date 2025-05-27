@@ -41,7 +41,7 @@ class ProfileUser(LoginRequiredMixin, UpdateView):
         return self.request.user
 
 
-class PublicProfileView(DetailView):
+class PublicProfileView(LoginRequiredMixin, DetailView):
     model = get_user_model()
     template_name = 'users/public_profile.html'
     context_object_name = 'seller'

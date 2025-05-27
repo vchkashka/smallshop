@@ -9,15 +9,32 @@
         {% for p in products %}
         {% if p.is_published %}
         <div class="card">
+          <div class="image-container">
             <img src="{{ p.image.url }}" alt="{{ p.title }}">
-            <div class="card-body">
-                <h5 class="card-title">{{ p.title }}</h5>
-                <p class="product-price">{{ p.price }} ₽</p>
+            <form method="post" action="{% url 'add_to_favorites' p.slug %}">
+              {% csrf_token %}
+              {% if user.is_authenticated and perms.products.can_mark_featured_product %}
+                {% if user in p.favorites.all %}
+                  <button type="submit" class="favorite-btn" title="Удалить из избранного"
+                          formaction="{% url 'remove_from_favorites' p.slug %}">❤️</button>
+                {% else %}
+                  <button type="submit" class="favorite-btn" title="Добавить в избранное">🤍</button>
+                {% endif %}
+              {% endif %}
+            </form>
+          </div>
+          <div class="card-body">
+            <div class="card-content">
+              <h5 class="card-title">{{ p.title }}</h5>
+              <p class="product-price">{{ p.price }} ₽</p>
+              <div class="card-text">
                 {% autoescape off %}
-                <p class="card-text">{{ p.content|linebreaks|truncatewords:10 }}</p>
+                {{ p.content|linebreaks|truncatewords:10 }}
                 {% endautoescape %}
-                <a href="{% url 'product_detail' p.slug %}" class="btn">Подробнее</a>
+              </div>
             </div>
+            <a href="{% url 'product_detail' p.slug %}" class="btn">Подробнее</a>
+          </div>
         </div>
         {% endif %}
         {% endfor %}

@@ -3,6 +3,8 @@ from django.utils.text import slugify
 from django.urls import reverse
 from django.db import models
 
+User = get_user_model()
+
 
 class PublishedModel(models.Manager):
     def get_queryset(self):
@@ -61,9 +63,10 @@ class Product(models.Model):
                                  verbose_name="Категория")
     tags = models.ManyToManyField('TagProduct', blank=True,
                                   related_name='tags', verbose_name="Теги")
-    seller = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL,
+    seller = models.ForeignKey(User, on_delete=models.SET_NULL,
                                related_name='products', null=True,
                                default=None)
+    favorites = models.ManyToManyField(User, related_name='favorite_products', blank=True)
 
     def __str__(self):
         return self.title

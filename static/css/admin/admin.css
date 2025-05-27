@@ -195,7 +195,7 @@ h1, h2 {
   }
   
   #recent-actions-module li.changelink {
-    border-left-color: #2980b9;
+    border-left-color: #005f9f;
   }
   
   #recent-actions-module li a, #recent-actions-module li {
@@ -207,3 +207,19 @@ h1, h2 {
     font-size: 12px;
     color: #6D4C41;
   }
+
+  #result_list thead th .text a {
+    color: #005f9f;
+}
+
+#result_list thead th .text a:hover {
+    color: #F5E3C3;
+}
+
+.help {
+    color: #005f9f !important;
+}
+
+.module.aligned .datetime {
+    color: #6D4C41;
+}

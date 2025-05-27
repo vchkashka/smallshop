@@ -509,7 +509,7 @@
  	padding: 5px;
  	color: #FDF6EC;
  	font-size: 14px;
- 	font-family: Verdana, Geneva, Arial, Helvetica;
+ 	font-family: 'Times New Roman';
  	text-align: left;
  	overflow: hidden;
  }
@@ -786,4 +786,40 @@ margin-top: 0;
 
 .profile-fields {
     flex: 1;
+}
+
+.favorite-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	z-index: 2;
+}
+
+.favorite-btn-detail {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+}
+
+.favorite-btn:hover {
+    transform: scale(1.3);
+}
+
+.image-container {
+  position: relative;
+}
+
+.product-title-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }

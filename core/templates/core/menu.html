@@ -9,6 +9,9 @@
     {% endfor %}
 
     {% if user.is_authenticated %} 
+        {% if perms.products.can_mark_featured_product %} 
+        <li class="last"><a href="{% url 'favorite_products' %}">Избранное</a></li>
+        {% endif %}
 		<li class="last">
             <a href="{% url 'users:profile' %}">{{user.username}}</a>
             <span class="line">| </span> 

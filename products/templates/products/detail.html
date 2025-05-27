@@ -12,9 +12,24 @@
         {% endif %}
 
         <div class="product-info">
-            <h1 class="product-title">{{ product.title }}</h1>
+            <div class="product-title-container">
+                <h1 class="product-title">{{ product.title }}</h1>
+                {% if user.is_authenticated and perms.products.can_mark_featured_product %}
+                <form method="post" action="{% url 'add_to_favorites' product.slug %}">
+                    {% csrf_token %}
+                    {% if user.is_authenticated %}
+                        {% if user in product.favorites.all %}
+                            <button type="submit" class="favorite-btn-detail" title="Удалить из избранного"
+                                    formaction="{% url 'remove_from_favorites' product.slug %}">❤️</button>
+                        {% else %}
+                            <button type="submit" class="favorite-btn-detail" title="Добавить в избранное">🤍</button>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+                </form>
+            </div>
+
             {% block breadcrumbs %} 
-            <!-- Теги --> 
                 {% with product.tags.all as tags %} 
                     {% if tags %} 
                         <ul class="tags-list"> 
@@ -43,13 +58,6 @@
 
             {% if product.price %}
                 <p class="product-price">Цена: {{ product.price }} ₽</p>
-            {% endif %}
-
-            {% if request.user != product.seller %}
-                <form method="post" action="{% url 'create_order' %}">
-                    {% csrf_token %}
-                    <button class="btn">Добавить в корзину</button>
-                </form>
             {% endif %}
 
             {% if perms.products.can_edit_own_products %}
