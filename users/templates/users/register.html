@@ -1,6 +1,6 @@
 {% extends 'base.html' %} 
 {% block content %} 
-    <h3 class="left-indent">Регистрация</h3> 
+    <h1 class="left-indent">Регистрация</h1> 
     <form method="post" class="left-indent"> 
         {% csrf_token %} 
         <input type="hidden" name="next" value="{{ next }}" /> 

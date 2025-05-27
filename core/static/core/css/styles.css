@@ -770,3 +770,20 @@ margin-top: 0;
 .list-pages .page-num-selected:hover {
 	box-shadow: none;
 }
+
+.profile-container {
+	padding-left: 20px;
+    display: flex;
+	align-items: flex-start;
+	gap: 40px;
+}
+
+.profile-photo img {
+    max-width: 200px;
+	border-radius: 10px;
+	margin-top: 20px;
+}
+
+.profile-fields {
+    flex: 1;
+}

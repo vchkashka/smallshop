@@ -45,10 +45,16 @@
                 <p class="product-price">Цена: {{ product.price }} ₽</p>
             {% endif %}
 
-            <form method="post" action="{% url 'create_order' %}">
-                {% csrf_token %}
-                <button class="btn">Добавить в корзину</button>
-            </form>
+            {% if request.user != product.seller %}
+                <form method="post" action="{% url 'create_order' %}">
+                    {% csrf_token %}
+                    <button class="btn">Добавить в корзину</button>
+                </form>
+            {% endif %}
+
+            {% if perms.products.can_edit_own_products %}
+                <a href="{% url 'edit_product' product.slug %}">Редактировать</a>
+            {% endif %}
         </div>
     </div>
 </div>

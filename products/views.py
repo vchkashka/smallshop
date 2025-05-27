@@ -1,13 +1,12 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse, reverse_lazy
-from django.http import HttpResponse
-from django.views import View
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView
-from .models import Product, Category, TagProduct
-from django.views.generic.edit import (FormView, CreateView,
+from .models import Product, TagProduct
+from django.views.generic.edit import (CreateView,
                                        UpdateView, DeleteView)
 from .utils import DataMixin
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import (LoginRequiredMixin,
+                                        PermissionRequiredMixin)
 
 
 # def addproduct(request):
@@ -55,13 +54,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 #         return super().form_valid(form)
 
 
-class AddProduct(LoginRequiredMixin, DataMixin, CreateView):
+class AddProduct(LoginRequiredMixin, PermissionRequiredMixin, DataMixin,
+                 CreateView):
     model = Product
     fields = ['title', 'content', 'price', 'image', 'is_published', 'category',
               'tags']
     template_name = 'products/addproduct.html'
     success_url = reverse_lazy('home')
     title_page = 'Добавление товара'
+    permission_required = 'products.add_product'
 
     def form_valid(self, form):
         p = form.save(commit=False)
@@ -69,12 +70,13 @@ class AddProduct(LoginRequiredMixin, DataMixin, CreateView):
         return super().form_valid(form)
 
 
-class UpdateProduct(DataMixin, UpdateView):
+class UpdateProduct(PermissionRequiredMixin, DataMixin, UpdateView):
     model = Product
     fields = ['title', 'content', 'price', 'image', 'is_published', 'category']
     template_name = 'products/addproduct.html'
     success_url = reverse_lazy('home')
     title_page = 'Редактирование товара'
+    permission_required = 'products.change_product'
 
 
 class DeleteProduct(DataMixin, DeleteView):
@@ -113,7 +115,8 @@ class ShowProduct(DataMixin, DetailView):
 
 # def product_search(request):
 #     query = request.GET.get('q', '').strip()
-#     filtered_products = Product.published.all().filter(title__icontains=query)
+#     filtered_products = Product.published.all().filter(
+# title__icontains=query)
 
 #     data = {
 #         'title': 'Поиск товаров',
@@ -190,7 +193,7 @@ class TagProductList(DataMixin, ListView):
     allow_empty = False
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs) 
+        context = super().get_context_data(**kwargs)
         tag = get_object_or_404(TagProduct, slug=self.kwargs['tag_slug'])
         return self.get_mixin_context(context, title='Тег: ' + tag.tag)
 
