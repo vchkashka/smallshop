@@ -28,6 +28,11 @@ class Category(models.Model):
         verbose_name = 'Категория товаров'
         verbose_name_plural = 'Категории товаров'
 
+    def save(self, *args, **kwargs):
+        translit_name = translit_to_eng(self.name)
+        self.slug = slugify(translit_name)
+        super().save(*args, **kwargs)
+
 
 def translit_to_eng(s: str) -> str:
     d = {'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd',
@@ -66,7 +71,8 @@ class Product(models.Model):
     seller = models.ForeignKey(User, on_delete=models.SET_NULL,
                                related_name='products', null=True,
                                default=None)
-    favorites = models.ManyToManyField(User, related_name='favorite_products', blank=True)
+    favorites = models.ManyToManyField(User, related_name='favorite_products',
+                                       blank=True)
 
     def __str__(self):
         return self.title
@@ -82,8 +88,8 @@ class Product(models.Model):
 
 
 class TagProduct(models.Model):
-    tag = models.CharField(max_length=100, db_index=True,
-                           verbose_name="Заголовок")
+    name = models.CharField(max_length=100, db_index=True,
+                            verbose_name="Заголовок")
     slug = models.SlugField(max_length=255, unique=True, db_index=True,
                             verbose_name="Слаг")
 
@@ -91,11 +97,16 @@ class TagProduct(models.Model):
         return reverse('tag', kwargs={'tag_slug': self.slug})
 
     def __str__(self):
-        return self.tag
+        return self.name
 
     class Meta:
         verbose_name = 'Тег товара'
         verbose_name_plural = 'Теги товара'
+
+    def save(self, *args, **kwargs):
+        translit_name = translit_to_eng(self.name)
+        self.slug = slugify(translit_name)
+        super().save(*args, **kwargs)
 
 
 class CategoryDetails(models.Model):

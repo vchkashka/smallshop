@@ -1,5 +1,5 @@
 from django import forms
-from .models import Category, TagProduct, Product
+from .models import Category, TagProduct, Product, CategoryDetails
 from django.core.exceptions import ValidationError
 from django.utils.deconstruct import deconstructible
 
@@ -20,24 +20,7 @@ class RussianValidator:
             raise ValidationError(self.message, code=self.code)
 
 
-# class AddProductForm(forms.Form):
-#     title = forms.CharField(max_length=255, label="Название",
-#                             validators=[RussianValidator(), ])
-#     content = forms.CharField(widget=forms.Textarea(), required=False,
-#                               label="Описание")
-#     price = forms.DecimalField(max_digits=10, decimal_places=2, label="Цена")
-#     # image = forms.ImageField(label="Изображение")
-#     is_published = forms.BooleanField(label="Статус", required=False)
-#     slug = forms.SlugField(max_length=255, label="URL")
-
-#     category = forms.ModelChoiceField(queryset=Category.objects.all(),
-#                                       label="Категория",
-#                                       empty_label="Категория не выбрана")
-#     tags = forms.ModelChoiceField(queryset=TagProduct.objects.all(),
-#                                   required=False, label="Теги",
-#                                   empty_label="Без тегов")
-
-class AddProductForm(forms.ModelForm):
+class ProductForm(forms.ModelForm):
     category = forms.ModelChoiceField(queryset=Category.objects.all(),
                                       empty_label="Категория не выбрана",
                                       label="Категория")
@@ -48,8 +31,8 @@ class AddProductForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ['title', 'content', 'price', 'is_published', 'slug',
-                  'category', 'tags', 'image']
+        fields = ['title', 'content', 'price', 'image', 'is_published',
+                  'category', 'tags']
         labels = {'slug': 'URL'}
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-input'}),
@@ -61,3 +44,15 @@ class AddProductForm(forms.ModelForm):
         if price < 0:
             raise ValidationError('Цена не может быть отрицательной')
         return price
+
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name', 'slug']
+
+
+class CategoryDetailsForm(forms.ModelForm):
+    class Meta:
+        model = CategoryDetails
+        fields = ['description', 'banner_image']

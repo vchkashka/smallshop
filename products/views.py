@@ -1,7 +1,8 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
+from .forms import ProductForm
 from django.views.generic import ListView, DetailView
-from .models import Product, TagProduct
+from .models import Product, TagProduct, Category, CategoryDetails
 from django.views.generic.edit import (CreateView,
                                        UpdateView, DeleteView)
 from .utils import DataMixin
@@ -13,8 +14,9 @@ from django.contrib.auth.decorators import permission_required
 class AddProduct(LoginRequiredMixin, PermissionRequiredMixin, DataMixin,
                  CreateView):
     model = Product
-    fields = ['title', 'content', 'price', 'image', 'is_published', 'category',
-              'tags']
+    form_class = ProductForm
+    # fields = ['title', 'content', 'price', 'image', 'is_published', 'category',
+    #           'tags']
     template_name = 'products/addproduct.html'
     success_url = reverse_lazy('home')
     title_page = 'Добавление товара'
@@ -29,11 +31,16 @@ class AddProduct(LoginRequiredMixin, PermissionRequiredMixin, DataMixin,
 class UpdateProduct(LoginRequiredMixin, PermissionRequiredMixin,
                     DataMixin, UpdateView):
     model = Product
-    fields = ['title', 'content', 'price', 'image', 'is_published', 'category']
+    form_class = ProductForm
+    # fields = ['title', 'content', 'price', 'image', 'is_published', 'category',
+    #           'tags']
     template_name = 'products/addproduct.html'
     success_url = reverse_lazy('home')
     title_page = 'Редактирование товара'
     permission_required = 'products.change_product'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Product, slug=self.kwargs['slug'])
 
 
 class DeleteProduct(LoginRequiredMixin, PermissionRequiredMixin,
@@ -105,13 +112,13 @@ class TagProductList(DataMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         tag = get_object_or_404(TagProduct, slug=self.kwargs['tag_slug'])
-        return self.get_mixin_context(context, title='Тег: ' + tag.tag)
+        return self.get_mixin_context(context, title='Тег: ' + tag.name)
 
     def get_queryset(self):
         return Product.published.filter(tags__slug=self.kwargs['tag_slug'])
 
 
-@permission_required(perm='products.can_mark_featured_product',
+@permission_required(perm='products.can_mark_featured',
                      raise_exception=True)
 def add_to_favorites(request, product_slug):
     product = get_object_or_404(Product, slug=product_slug)
@@ -119,7 +126,7 @@ def add_to_favorites(request, product_slug):
     return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 
-@permission_required(perm='products.can_mark_featured_product',
+@permission_required(perm='products.can_mark_featured',
                      raise_exception=True)
 def remove_from_favorites(request, product_slug):
     product = get_object_or_404(Product, slug=product_slug)
@@ -127,9 +134,73 @@ def remove_from_favorites(request, product_slug):
     return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 
-@permission_required(perm='products.can_mark_featured_product',
+@permission_required(perm='products.can_mark_featured',
                      raise_exception=True)
 def favorite_products(request):
     favorites = request.user.favorite_products.all()
     return render(request, 'products/favorite_products.html',
                   {'favorites': favorites})
+
+
+def manage_categories(request):
+    categories = Category.objects.all()
+    tags = TagProduct.objects.all()
+    return render(request, 'products/manage_categories.html', {
+        'categories': categories, 'tags': tags})
+
+
+def add_category(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        Category.objects.create(name=name)
+        return redirect('manage_categories')
+
+
+def edit_category(request, pk):
+    category = get_object_or_404(Category, id=pk)
+    details, created = CategoryDetails.objects.get_or_create(category=category)
+
+    if request.method == 'POST':
+        category.name = request.POST.get('name')
+        category.save()
+
+        details.description = request.POST.get('description', '')
+        if 'banner_image' in request.FILES:
+            details.banner_image = request.FILES['banner_image']
+        details.save()
+
+        return redirect('manage_categories')
+
+    return render(request, 'products/edit_category.html',
+                  {'category': category})
+
+
+def delete_category(request, pk):
+    category = get_object_or_404(Category, id=pk)
+    if request.method == 'POST':
+        category.delete()
+    return redirect('manage_categories')
+
+
+def add_tag(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        TagProduct.objects.create(name=name)
+        return redirect('manage_categories')
+    return redirect('manage_categories')
+
+
+def edit_tag(request, pk):
+    tag = get_object_or_404(TagProduct, id=pk)
+    if request.method == 'POST':
+        tag.name = request.POST.get('name')
+        tag.save()
+        return redirect('manage_categories')
+    return render(request, 'products/edit_tag.html', {'tag': tag})
+
+
+def delete_tag(request, pk):
+    tag = get_object_or_404(TagProduct, id=pk)
+    if request.method == 'POST':
+        tag.delete()
+    return redirect('manage_categories')

@@ -14,7 +14,7 @@
         <div class="product-info">
             <div class="product-title-container">
                 <h1 class="product-title">{{ product.title }}</h1>
-                {% if user.is_authenticated and perms.products.can_mark_featured_product %}
+                {% if perms.products.can_mark_featured %}
                 <form method="post" action="{% url 'add_to_favorites' product.slug %}">
                     {% csrf_token %}
                     {% if user.is_authenticated %}
@@ -35,7 +35,7 @@
                         <ul class="tags-list"> 
                             {% for t in tags %} 
                             <li><a 
-                        href="{{t.get_absolute_url}}">{{t.tag}}</a></li> 
+                        href="{{t.get_absolute_url}}">{{t.name}}</a></li> 
                             {% endfor %} 
                         </ul>
                     {% endif %} 
@@ -60,9 +60,18 @@
                 <p class="product-price">Цена: {{ product.price }} ₽</p>
             {% endif %}
 
-            {% if perms.products.can_edit_own_products %}
-                <a href="{% url 'edit_product' product.slug %}">Редактировать</a>
-            {% endif %}
+            <div class="btn-group">
+                {% if perms.products.change_product and request.user == product.seller %}
+                    <a href="{% url 'edit_product' product.slug %}" class="btn">Редактировать</a>
+                {% endif %}
+
+                {% if perms.products.delete_product and request.user == product.seller %}
+                    <form method="get" action="{% url 'delete_product' product.slug %}">
+                    {% csrf_token %}
+                    <button class="btn-delete">Удалить</button>
+                    </form>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Редактирование тега</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="name" class="form-control" value="{{ tag.name }}" required>
+        <div class="btn-group">
+            <button type="submit" class="btn">Сохранить</button>
+            <button type="button" class="btn" onclick="window.location.href='{% url 'manage_categories' %}'">Отмена</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

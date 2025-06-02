@@ -1,7 +1,9 @@
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.urls import reverse_lazy
+from .models import SellerReview
+from django.shortcuts import redirect
 from .forms import (LoginUserForm, RegisterUserForm, ProfileUserForm,
-                    UserPasswordChangeForm)
+                    UserPasswordChangeForm, SellerReviewForm)
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -44,7 +46,28 @@ class ProfileUser(LoginRequiredMixin, UpdateView):
 class PublicProfileView(LoginRequiredMixin, DetailView):
     model = get_user_model()
     template_name = 'users/public_profile.html'
+    extra_context = {'default_image': settings.DEFAULT_USER_IMAGE}
     context_object_name = 'seller'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['reviews'] = SellerReview.objects.filter(
+            seller=self.get_object())
+        context['form'] = SellerReviewForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = SellerReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.reviewer = request.user
+            review.seller = self.object
+            review.save()
+            return redirect('users:public_profile', pk=self.object.pk)
+        context = self.get_context_data()
+        context['form'] = form
+        return self.render_to_response(context)
 
 
 class UserPasswordChange(PasswordChangeView):

@@ -2,15 +2,43 @@
 {% block content %}
     {% if request.user != seller %}
         <div class="profile-container">
-                <div class="profile-photo">
-                    <img src="{{ seller.photo.url }}" alt="Фото продавца">
+            <div class="profile-photo">
+                {% if seller.photo %}
+                    <img src="{{ seller.photo.url }}">
+                {% else %}
+                    <img src="{{ default_image }}">
+                {% endif %}
+            </div>
+            <div class="profile-fields">
+                <h1>{{ seller.username }}</h1>
+                <p>Имя: {{ seller.first_name }}</p>
+                <p>Фамилия: {{ seller.last_name }}</p>
+                <p>Контактный номер: {{ seller.phone }}</p>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="left-indent">
+            <h4>Оставить отзыв</h4>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.text }}
+                <button class="btn btn-primary mt-2" type="submit" class="btn">Отправить</button>
+            </form>
+
+            <hr>
+
+            <h4>Отзывы о продавце</h4>
+            {% for review in reviews %}
+                <div class="border-bottom mb-2 pb-2">
+                    <strong>{{ review.reviewer.username }}</strong> — 
+                    <em>{{ review.created_at|date:"d.m.Y H:i" }}</em><br>
+                    {{ review.text|linebreaks }}
                 </div>
-                <div class="profile-fields">
-                    <h1>{{ seller.username }}</h1>
-                    <p>Имя: {{ seller.first_name }}</p>
-                    <p>Фамилия: {{ seller.last_name }}</p>
-                    <p>Контактный номер: {{ seller.phone }}</p>
-                </div>
+            {% empty %}
+                <p>Отзывов пока нет.</p>
+            {% endfor %}
         </div>
     {% endif %}
 {% endblock %}

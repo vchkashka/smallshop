@@ -25,7 +25,7 @@
             <img src="{{ p.image.url }}" alt="{{ p.title }}">
             <form method="post" action="{% url 'add_to_favorites' p.slug %}">
               {% csrf_token %}
-              {% if user.is_authenticated and perms.products.can_mark_featured_product%}
+              {% if user.is_authenticated and perms.products.can_mark_featured %}
                 {% if user in p.favorites.all %}
                   <button type="submit" class="favorite-btn" title="Удалить из избранного"
                           formaction="{% url 'remove_from_favorites' p.slug %}">❤️</button>

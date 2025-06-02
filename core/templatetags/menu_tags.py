@@ -12,4 +12,5 @@ def show_menu(context):
     return {
         'menu': menu,
         'user': context['user'],
+        'perms': context.get('perms'),
     }

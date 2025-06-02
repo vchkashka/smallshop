@@ -1,12 +1,27 @@
-{% extends 'base.html' %} 
-  
-{% block content %} 
+{% extends 'base.html' %}
+{% block content %}
 <div class="form-wrapper">
-    <h3>{{title}}</h3> 
-    <form action="" method="post" enctype="multipart/form-data">
+    <h3>{{ title }}</h3>
+
+    {% if 'Менеджеры' in user.groups.values_list|join:',' %}
+    <h4>Загрузите файлы:</h4>
+    <form method="post" action="{% url 'upload_file' %}" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Отправить</button></p>
+        <button type="submit" class="btn">Загрузить</button>
     </form>
+    <hr>
+    {% endif %}
+
+    <h4>Подробную информацию можете посмотреть здесь:</h4>
+    {% if uploaded_files %}
+        <ul>
+        {% for file_url in uploaded_files %}
+            <li><a href="{{ file_url }}" target="_blank">{{ file_url|cut:"uploads/" }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Файлы пока не загружены.</p>
+    {% endif %}
 </div>
-{% endblock %} 
+{% endblock %}

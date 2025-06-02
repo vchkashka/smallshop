@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="management-container">
+    <div class="column">
+        <h2>Категории</h2>
+
+        <form method="post" action="{% url 'add_category' %}">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="Название категории" required>
+            <button type="submit" class="btn">Добавить</button>
+        </form>
+
+        <h3>Список категорий</h3>
+        <ul>
+            {% for category in categories %}
+                <li>    
+                    <div class="btn-group-cats">
+                    <div class="item-name">{{ category.name }}</div>
+                    
+                    <button type="button" class="btn" onclick="window.location.href='{% url 'edit_category' category.id %}'">Редактировать</button>
+
+                    <form method="post" action="{% url 'delete_category' category.id %}" >
+                        {% csrf_token %}
+                        <button type="submit" onclick="return confirm('Удалить категорию?')" class="btn-delete">Удалить</button>
+                    </form>
+                    
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="column">
+        <h2>Теги</h2>
+
+        <form method="post" action="{% url 'add_tag' %}">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="Название тега" required>
+            <button type="submit" class="btn">Добавить</button>
+        </form>
+
+        <h3>Список тегов</h3>
+        <ul>
+            {% for tag in tags %}
+                <li>
+                    <div class="btn-group-cats">
+                    <div class="item-name">{{ tag.name }}</div>
+                    
+                    <button type="button" class="btn" onclick="window.location.href='{% url 'edit_tag' tag.id %}'">Редактировать</button>
+
+                    <form method="post" action="{% url 'delete_tag' tag.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" onclick="return confirm('Удалить тег?')" class="btn-delete">Удалить</button>
+                    </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

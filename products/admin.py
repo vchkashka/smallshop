@@ -84,8 +84,8 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(TagProduct)
 class TagProductAdmin(admin.ModelAdmin):
-    list_display = ('id', 'tag', 'slug')
-    list_display_links = ('id', 'tag')
+    list_display = ('id', 'name', 'slug')
+    list_display_links = ('id', 'name')
 
 
 @admin.register(Category)
