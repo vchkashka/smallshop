@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
+from django.core.exceptions import PermissionDenied
 from .forms import ProductForm
 from django.views.generic import ListView, DetailView
 from .models import Product, TagProduct, Category, CategoryDetails
@@ -36,7 +37,10 @@ class UpdateProduct(LoginRequiredMixin, PermissionRequiredMixin,
     permission_required = 'products.change_product'
 
     def get_object(self, queryset=None):
-        return get_object_or_404(Product, slug=self.kwargs['slug'])
+        product = get_object_or_404(Product, slug=self.kwargs['slug'])
+        if product.seller != self.request.user:
+            raise PermissionDenied("У вас нет прав для редактирования этого товара")
+        return product
 
 
 class DeleteProduct(LoginRequiredMixin, PermissionRequiredMixin,
@@ -46,6 +50,12 @@ class DeleteProduct(LoginRequiredMixin, PermissionRequiredMixin,
     success_url = reverse_lazy('home')
     title_page = 'Удаление товара'
     permission_required = 'products.delete_product'
+
+    def get_object(self, queryset=None):
+        product = get_object_or_404(Product, slug=self.kwargs['slug'])
+        if product.seller != self.request.user:
+            raise PermissionDenied("У вас нет прав для удаления этого товара")
+        return product
 
 
 class ShowProduct(DataMixin, DetailView):
@@ -145,6 +155,8 @@ def manage_categories(request):
         'categories': categories, 'tags': tags})
 
 
+@permission_required(perm='products.add_category',
+                     raise_exception=True)
 def add_category(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -152,6 +164,8 @@ def add_category(request):
         return redirect('manage_categories')
 
 
+@permission_required(perm='products.change_category',
+                     raise_exception=True)
 def edit_category(request, pk):
     category = get_object_or_404(Category, id=pk)
     details, created = CategoryDetails.objects.get_or_create(category=category)
@@ -171,6 +185,8 @@ def edit_category(request, pk):
                   {'category': category})
 
 
+@permission_required(perm='products.delete_category',
+                     raise_exception=True)
 def delete_category(request, pk):
     category = get_object_or_404(Category, id=pk)
     if request.method == 'POST':
@@ -178,6 +194,8 @@ def delete_category(request, pk):
     return redirect('manage_categories')
 
 
+@permission_required(perm='products.add_tagproduct',
+                     raise_exception=True)
 def add_tag(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -186,6 +204,8 @@ def add_tag(request):
     return redirect('manage_categories')
 
 
+@permission_required(perm='products.change_tagproduct',
+                     raise_exception=True)
 def edit_tag(request, pk):
     tag = get_object_or_404(TagProduct, id=pk)
     if request.method == 'POST':
@@ -195,6 +215,8 @@ def edit_tag(request, pk):
     return render(request, 'products/edit_tag.html', {'tag': tag})
 
 
+@permission_required(perm='products.delete_tagproduct',
+                     raise_exception=True)
 def delete_tag(request, pk):
     tag = get_object_or_404(TagProduct, id=pk)
     if request.method == 'POST':

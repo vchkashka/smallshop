@@ -17,7 +17,6 @@ urlpatterns = [
     path('products/', include('products.urls')),
 ]
 
-
 handler404 = page_not_found
 
 if settings.DEBUG:
