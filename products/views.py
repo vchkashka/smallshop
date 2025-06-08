@@ -15,8 +15,6 @@ class AddProduct(LoginRequiredMixin, PermissionRequiredMixin, DataMixin,
                  CreateView):
     model = Product
     form_class = ProductForm
-    # fields = ['title', 'content', 'price', 'image', 'is_published', 'category',
-    #           'tags']
     template_name = 'products/addproduct.html'
     success_url = reverse_lazy('home')
     title_page = 'Добавление товара'
@@ -32,8 +30,6 @@ class UpdateProduct(LoginRequiredMixin, PermissionRequiredMixin,
                     DataMixin, UpdateView):
     model = Product
     form_class = ProductForm
-    # fields = ['title', 'content', 'price', 'image', 'is_published', 'category',
-    #           'tags']
     template_name = 'products/addproduct.html'
     success_url = reverse_lazy('home')
     title_page = 'Редактирование товара'
